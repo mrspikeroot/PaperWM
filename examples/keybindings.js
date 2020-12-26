@@ -236,7 +236,7 @@ function tileInto(leftBinding="<Super>less", rightBinding="<Super><Shift>less") 
         Keybindings.bindkey(rightBinding, "tile-into-right-column", tileIntoDirection(1), options);
 }
 
-function stackUnstack(basebinding = '<Super><Alt><Ctrl>') {
+function stackUnstack(basebinding = '<Super><Alt><Shift>') {
     // less: '<'
     let Tiling = Extension.imports.tiling;
 
