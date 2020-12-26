@@ -235,7 +235,7 @@ class SettingsWidget {
           'slurp-in', 'barf-out', 'center-horizontally',
           'paper-toggle-fullscreen', 'toggle-maximize-width', 'resize-h-inc',
           'resize-h-dec', 'resize-w-inc', 'resize-w-dec', 'cycle-width',
-          'cycle-height', 'take-window']
+          'cycle-height', 'take-window', 'stack-unstack-left', 'stack-unstack-right']
             .forEach(k => {
             addKeybinding(windows.model.child_model, settings, k);
         });

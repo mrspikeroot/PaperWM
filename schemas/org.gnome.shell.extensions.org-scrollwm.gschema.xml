@@ -228,6 +228,15 @@
       <default><![CDATA[['<Super>BackSpace']]]></default>
       <summary>Close the active window</summary>
     </key>
+    
+    <key type="as" name="stack-unstack-left">
+        <default><![CDATA[['<Super><Shift><Alt>Left']]]></default>
+        <summary>Stack or unstack the active window into the left column</summary>
+    </key>
+    <key type="as" name="stack-unstack-right">
+        <default><![CDATA[['<Super><Shift><Alt>Right']]]></default>
+        <summary>Stack or unstack the active window into the right column</summary>
+    </key>
   </schema>
 
   <schema id="org.gnome.Shell.Extensions.PaperWM.Workspace">

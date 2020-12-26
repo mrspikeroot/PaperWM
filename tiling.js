@@ -3185,6 +3185,179 @@ function barf(metaWindow) {
     ensureViewport(space.selectedWindow, space, true);
 }
 
+// function stackUnstack(windowToMove, dir) {
+//     let space = spaces.spaceOfWindow(windowToMove);
+//     let column_idx = space.indexOf(windowToMove);
+//     if (column_idx < 0)
+//         return;
+//     let column = space[column_idx];
+
+//     let columnToResize;
+
+//     if (column.length >= 2) {
+//         // this is a stacked window
+//         // move it into a new column
+//         let row_idx = column.indexOf(metaWindow);
+//         if (row_idx < 0)
+//             return;
+
+//         column.splice(row_idx, 1);
+//         if (dir == -1) {
+//             space.splice(column_idx, 0, [windowToMove]);
+//             columnToResize = column_idx + 1;
+//         }
+//         else {
+//             space.splice(column_idx + 1, 0, [windowToMove]);
+//             columnToResizej = column_idx;
+//         }
+//     }
+//     else {
+//         // this is an unstacked window
+//         // move it into a stack
+
+//         if (dir == -1) { // left
+//             if (column_idx == 0) return;
+//             space[column_idx - 1].push(windowToMove);
+//             columnToResize = column_idx - 1;
+//         }
+//         else { //right
+//             if (column_idx + 1 >= space.length) return;
+//             space[column_idx + 1].push(windowToMove);
+//             columnToResize = column_idx;
+//         }
+
+//         // is it necessary to remove the window from the column before removing the column?
+//         column.splice(0, 1);
+//         space.splice(column_idx, 1);
+//     }
+
+//     space.layout(true, {
+//         customAllocators: { [columnToResize]: Tiling.allocateEqualHeight }
+//     });
+//     space.emit("full-layout");
+// }
+
+function stackUnstack(metaWindow, dir) {
+    let space = spaces.spaceOfWindow(metaWindow);
+    let column_idx = space.indexOf(metaWindow);
+    if (column_idx < 0)
+        return;
+    let column = space[column_idx];
+    let columnToResize = 0;
+
+    if (column.length >= 2) {
+        // this is a stacked window
+        // move it into a new column
+        let row_idx = column.indexOf(metaWindow);
+        if (row_idx < 0)
+            return;
+
+        let removed = column.splice(row_idx, 1)[0];
+        let new_column_idx = column_idx;
+        if (dir === 1)
+            new_column_idx += 1;
+
+        space.splice(new_column_idx, 0, [removed]);
+
+        columnToResize = column_idx;
+        if (dir === -1)
+            columnToResize += 1;
+
+    }
+    else {
+        // this is an unstacked window
+        // move it into a stack
+
+        // can't stack into a column that doesn't exist
+        if (column_idx == 0 && dir == -1)
+            return;
+        if (column_idx + 1 >= space.length && dir == 1)
+            return;
+
+        let windowToMove = column[0];
+        space[column_idx + dir].push(windowToMove);
+
+        // is it necessary to remove the window from the column before removing the column?
+        column.splice(0, 1);
+        
+        space.splice(column_idx, 1);
+
+        columnToResize = column_idx;
+        if (dir === -1)
+            columnToResize -= 1;
+    }
+
+    space.layout(true, {
+        customAllocators: { [0]: Tiling.allocateEqualHeight }
+    });
+    space.emit("full-layout");
+    ensureViewport(space.selectedWindow, space, true);
+}
+
+function stackUnstackLeft(metaWindow) {
+    let dir = -1;
+    let space = spaces.spaceOfWindow(metaWindow);
+    let column_idx = space.indexOf(metaWindow);
+    if (column_idx < 0)
+        return;
+    let column = space[column_idx];
+    let columnToResize = 0;
+
+    if (column.length >= 2) {
+        // this is a stacked window
+        // move it into a new column
+        let row_idx = column.indexOf(metaWindow);
+        if (row_idx < 0)
+            return;
+
+        let removed = column.splice(row_idx, 1)[0];
+        let new_column_idx = column_idx;
+        if (dir === 1)
+            new_column_idx += 1;
+
+        space.splice(new_column_idx, 0, [removed]);
+
+        columnToResize = column_idx;
+        if (dir === -1)
+            columnToResize += 1;
+
+    }
+    else {
+        // this is an unstacked window
+        // move it into a stack
+
+        // can't stack into a column that doesn't exist
+        if (column_idx == 0 && dir == -1)
+            return;
+        if (column_idx + 1 >= space.length && dir == 1)
+            return;
+
+        let windowToMove = column[0];
+        space[column_idx + dir].push(windowToMove);
+
+        // is it necessary to remove the window from the column before removing the column?
+        column.splice(0, 1);
+        
+        space.splice(column_idx, 1);
+
+        columnToResize = column_idx;
+        if (dir === -1)
+            columnToResize -= 1;
+    }
+
+    space.layout(true, {
+        customAllocators: { [0]: Tiling.allocateEqualHeight }
+    });
+    space.emit("full-layout");
+    ensureViewport(space.selectedWindow, space, true);
+}
+
+function stackUnstackRight(metaWindow) {
+    let windowToMove = metaWindow;
+    stackUnstack(windowToMove, 1);
+}
+
+
 function selectPreviousSpace(mw, space) {
     spaces.selectStackSpace(Meta.MotionDirection.DOWN);
 }
